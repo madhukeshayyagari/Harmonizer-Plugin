@@ -12,10 +12,10 @@ public:
 
 	static Error_t create(CHarmony*& pCHarmony);
 	static Error_t destroy(CHarmony*& pCHarmony);
-	Error_t init(float fSampleRateInHz, float PitchShiftFactor, int iNumChannels);
+	Error_t init(float fSampleRateInHz, float fPitchShiftFactor, int iNumChannels);
 	Error_t reset();
-	Error_t setParam(float PitchShiftFactor);
-	Error_t process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames, int block_size);
+	Error_t setParam(float fPitchShiftFactor);
+	Error_t process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames, int kBlockSize);
 
 
 

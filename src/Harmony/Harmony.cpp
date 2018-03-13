@@ -5,7 +5,6 @@
 #include "MUSI6106Config.h"
 
 #include "ErrorDef.h"
-#include "Util.h"
 #include "Harmony.h"
 
 CHarmony::CHarmony() :
@@ -88,6 +87,7 @@ Error_t CHarmony::reset()
 Error_t CHarmony::setParam(float PitchShiftFactor) {
 
 	m_PitchShiftFactor = PitchShiftFactor;
+	return kNoError;
 }
 
 

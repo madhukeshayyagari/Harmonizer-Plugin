@@ -95,9 +95,6 @@ int main(int argc, char* argv[])
 	CHarmony::create(pCCHarmony);
 	pCCHarmony->init(fSampleRateInHz, fPitchShiftFactor, stFileSpec.iNumChannels);
 	pCCHarmony->setParam(fPitchShiftFactor);
-	//////////////////////////////////////////////////////////////////////////////
-	// Set Harmony parameters
-
 	time = clock();
 	//////////////////////////////////////////////////////////////////////////////
 	// get audio data and write it to the output file

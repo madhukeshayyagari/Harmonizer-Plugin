@@ -95,10 +95,31 @@ Error_t CHarmony::setParam(float PitchShiftFactor) {
 	return kNoError;
 }
 
-Error_t LowPass(float **input, float **output, int iNumberofFrames, int m_iNumChannels)
+Error_t CHarmony::LowPass(float **input, float **output, int iNumberofFrames, int m_iNumChannels)
 {
-	float RC = 1 / 5000 * 2 * 3.14;
-	float dt = 1 / 44100;
+	const int NZEROS = 6;
+	const int NPOLES = 6;
+	const double GAIN = 2.936532839e+03;
+
+	double xv[NZEROS + 1] = { 0.0 }, yv[NPOLES + 1] = { 0.0 };
+
+	for (int j = 0; j < m_iNumChannels; j++) {
+	for (int i = 0; i < iNumberofFrames; i++)
+	{
+		xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; xv[3] = xv[4]; xv[4] = xv[5]; xv[5] = xv[6];
+		xv[6] = input[j][i] / GAIN;
+		yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; yv[3] = yv[4]; yv[4] = yv[5]; yv[5] = yv[6];
+		yv[6] = (xv[0] + xv[6]) + 6.0 * (xv[1] + xv[5]) + 15.0 * (xv[2] + xv[4])
+			+ 20.0 * xv[3]
+			+ (-0.0837564796 * yv[0]) + (0.7052741145 * yv[1])
+			+ (-2.5294949058 * yv[2]) + (4.9654152288 * yv[3])
+			+ (-5.6586671659 * yv[4]) + (3.5794347983 * yv[5]);
+		output[j][i] = yv[6];
+	}
+}
+	
+/*float RC = 1 / (5000 * 2 * 3.14);
+	float dt = 1 / 11025;
 	float alpha = dt / (RC + dt);
 
 
@@ -109,7 +130,8 @@ Error_t LowPass(float **input, float **output, int iNumberofFrames, int m_iNumCh
 		{
 			output[i][j] - output[i][j - 1] + (alpha*(input[i][j] - output[i][j - 1]));
 		}
-	}
+	}*/
+	return kNoError;
 }
 
 
@@ -140,8 +162,6 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
 		{
 			if (count == ceil(iNumberOfFrames / m_PitchShiftFactor))
 				count = 0;
-			if (temp[j] == 0 && j!=0)
-				temp[j] = temp[j - 1];
 			ppfOutputBuffer[i][j] = temp[count];
 			count++;
 		}

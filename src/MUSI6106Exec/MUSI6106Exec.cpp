@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 	float                   **ppfAudioData = 0;
 
 	float                   **ppfOutputBuffer = 0;
+	float                   **ppfOutputBuffer1 = 0;
 
 	CAudioFileIf            *phAudioFile = 0;
 	CAudioFileIf            *phAudioOutFile = 0;
@@ -37,7 +38,7 @@ int main(int argc, char* argv[])
 	
 	CHarmony				*pCCHarmony = 0;
 	float                   fSampleRateInHz = 44100;
-	float					    fPitchShiftFactor= 1.5;
+	float					    fPitchShiftFactor= 1;
 	//int						fblock_size= 1024;
 	CAudioFileIf            *pCInstance = 0;
 
@@ -94,6 +95,10 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < stFileSpec.iNumChannels; i++)
 		ppfOutputBuffer[i] = new float[kBlockSize];
 
+	ppfOutputBuffer1 = new float*[stFileSpec.iNumChannels];
+	for (int i = 0; i < stFileSpec.iNumChannels; i++)
+		ppfOutputBuffer1[i] = new float[kBlockSize];
+
 	CHarmony::create(pCCHarmony);
 	pCCHarmony->init(fSampleRateInHz, fPitchShiftFactor, stFileSpec.iNumChannels);
 	pCCHarmony->setParam(fPitchShiftFactor);
@@ -104,8 +109,9 @@ int main(int argc, char* argv[])
 	{
 		long long iNumFrames = kBlockSize;
 		phAudioFile->readData(ppfAudioData, iNumFrames);
-		pCCHarmony->process(ppfAudioData, ppfOutputBuffer, iNumFrames, kBlockSize);
-		phAudioOutFile->writeData(ppfOutputBuffer, iNumFrames);
+		pCCHarmony->LowPass(ppfAudioData, ppfOutputBuffer, iNumFrames, stFileSpec.iNumChannels);
+		pCCHarmony->process(ppfOutputBuffer, ppfOutputBuffer1, iNumFrames, kBlockSize);
+		phAudioOutFile->writeData(ppfOutputBuffer1, iNumFrames);
 		cout << "\r" << "reading and writing";
 
 	}
@@ -128,6 +134,11 @@ int main(int argc, char* argv[])
 		delete[] ppfOutputBuffer[i];
 	delete[] ppfOutputBuffer;
 	ppfOutputBuffer = 0;
+
+	for (int i = 0; i < stFileSpec.iNumChannels; i++)
+		delete[] ppfOutputBuffer1[i];
+	delete[] ppfOutputBuffer1;
+	ppfOutputBuffer1 = 0;
 
 	return 0;
 

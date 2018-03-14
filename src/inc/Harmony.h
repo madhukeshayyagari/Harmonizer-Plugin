@@ -16,7 +16,7 @@ public:
 	Error_t reset();
 	Error_t setParam(float fPitchShiftFactor);
 	Error_t process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames, int kBlockSize);
-
+	Error_t LowPass(float **input, float **output, int iNumberofFrames, int m_iNumChannels);
 
 
 private:

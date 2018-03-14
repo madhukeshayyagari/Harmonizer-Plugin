@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	std::string             sInputFilePath,                 //!< file paths
 		sOutputFilePath;
 
-	static const int        kBlockSize = 1024;
+	static const int        kBlockSize = 4096;
 
 	clock_t                 time = 0;
 
@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
 	float                   **ppfOutputBuffer = 0;
 
 	CAudioFileIf            *phAudioFile = 0;
+	CAudioFileIf            *phAudioOutFile = 0;
 
 	std::fstream            hOutputFile;
 	CAudioFileIf::FileSpec_t stFileSpec;
@@ -36,7 +37,7 @@ int main(int argc, char* argv[])
 	
 	CHarmony				*pCCHarmony = 0;
 	float                   fSampleRateInHz = 44100;
-	float					fPitchShiftFactor= 2;
+	float					    fPitchShiftFactor= 1.5;
 	//int						fblock_size= 1024;
 	CAudioFileIf            *pCInstance = 0;
 
@@ -52,7 +53,7 @@ int main(int argc, char* argv[])
 	else
 	{
 		sInputFilePath = argv[1];
-		sOutputFilePath = sInputFilePath + ".txt";
+		sOutputFilePath = argv[2];
 		
 	}
 
@@ -69,18 +70,19 @@ int main(int argc, char* argv[])
 
 	//////////////////////////////////////////////////////////////////////////////
 	// open the output wav file
-
-	CAudioFileIf::create(pCInstance);
-	pCInstance->openFile("Output.wav", CAudioFileIf::kFileWrite, &stFileSpec);
+	CAudioFileIf::create(phAudioOutFile);
+	phAudioOutFile->openFile(sOutputFilePath, CAudioFileIf::kFileWrite, &stFileSpec);
+	// CAudioFileIf::create(pCInstance);
+	// pCInstance->openFile("Output.wav", CAudioFileIf::kFileWrite, &stFileSpec);
 
 	//////////////////////////////////////////////////////////////////////////////
 	// open the output text file
-	hOutputFile.open(sOutputFilePath.c_str(), std::ios::out);
-	if (!hOutputFile.is_open())
-	{
-		cout << "Text file open error!";
-		return -1;
-	}
+	// hOutputFile.open(sOutputFilePath.c_str(), std::ios::out);
+	// if (!hOutputFile.is_open())
+	// {
+	// 	cout << "Text file open error!";
+	// 	return -1;
+	// }
 
 	//////////////////////////////////////////////////////////////////////////////
 	// allocate memory
@@ -103,17 +105,9 @@ int main(int argc, char* argv[])
 		long long iNumFrames = kBlockSize;
 		phAudioFile->readData(ppfAudioData, iNumFrames);
 		pCCHarmony->process(ppfAudioData, ppfOutputBuffer, iNumFrames, kBlockSize);
-		pCInstance->writeData(ppfOutputBuffer, iNumFrames);
+		phAudioOutFile->writeData(ppfOutputBuffer, iNumFrames);
 		cout << "\r" << "reading and writing";
 
-		for (int i = 0; i < iNumFrames; i++)
-		{
-			for (int c = 0; c < stFileSpec.iNumChannels; c++)
-			{
-				hOutputFile << ppfOutputBuffer[c][i] << "\t";
-			}
-			hOutputFile << endl;
-		}
 	}
 
 	cout << "\nreading/writing done in: \t" << (clock() - time)*1.F / CLOCKS_PER_SEC << " seconds." << endl;
@@ -121,9 +115,9 @@ int main(int argc, char* argv[])
 	//////////////////////////////////////////////////////////////////////////////
 	// clean-up
 	CAudioFileIf::destroy(phAudioFile);
-	CAudioFileIf::destroy(pCInstance);
+	CAudioFileIf::destroy(phAudioOutFile);
 	CHarmony::destroy(pCCHarmony);
-	hOutputFile.close();
+	// hOutputFile.close();
 
 	for (int i = 0; i < stFileSpec.iNumChannels; i++)
 		delete[] ppfAudioData[i];

@@ -291,7 +291,7 @@
 // Audio plugin settings..
 
 #ifndef  JucePlugin_Build_VST
- #define JucePlugin_Build_VST              1
+ #define JucePlugin_Build_VST              0
 #endif
 #ifndef  JucePlugin_Build_VST3
  #define JucePlugin_Build_VST3             0
@@ -333,7 +333,7 @@
  #define JucePlugin_ManufacturerCode       0x4d616e75 // 'Manu'
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x59757569 // 'Yuui'
+ #define JucePlugin_PluginCode             0x436c736e // 'Clsn'
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                0

@@ -55,6 +55,7 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+	void setParameter(int paramIdx, float fNewValue) override;
 
 private:
     //==============================================================================
@@ -62,4 +63,5 @@ private:
 
 		CHarmony* pCHarmony;
 		float m_pitchShiftFac;
+		float m_pitchShiftInit = 2;
 };

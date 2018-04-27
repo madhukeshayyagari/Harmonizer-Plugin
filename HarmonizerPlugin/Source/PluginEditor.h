@@ -28,7 +28,6 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 	void sliderValueChanged(Slider* slider) override;
-	void initializeSlider(Slider &slider, float Min, float Max, float Interval, float x, float y, float width, float height, const String &displayText, float fdefault);
 	void comboBoxChanged(ComboBox*);
 
 private:

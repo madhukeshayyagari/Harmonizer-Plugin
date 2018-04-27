@@ -25,6 +25,7 @@ HarmonizerPluginAudioProcessor::HarmonizerPluginAudioProcessor()
 #endif
 {
 	pCHarmony = 0;
+
 }
 
 HarmonizerPluginAudioProcessor::~HarmonizerPluginAudioProcessor()
@@ -100,9 +101,10 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
+	auto totalNumInputChannels = getTotalNumInputChannels();
 	pCHarmony->create(pCHarmony);
-	pCHarmony->init(this->getSampleRate(), m_pitchShiftFac, this->getTotalNumOutputChannels());
-	pCHarmony->setParam(m_pitchShiftFac);
+	pCHarmony->init(this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
+	pCHarmony->setParam(m_pitchShiftInit);
 }
 
 void HarmonizerPluginAudioProcessor::releaseResources()
@@ -197,3 +199,14 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new HarmonizerPluginAudioProcessor();
 }
+
+void HarmonizerPluginAudioProcessor::setParameter(int iParamIdx, float fNewValue)
+{
+	if (iParamIdx == 0)
+	{
+		m_pitchShiftFac = fNewValue;
+		pCHarmony->setParam(m_pitchShiftFac);
+
+	}
+}
+

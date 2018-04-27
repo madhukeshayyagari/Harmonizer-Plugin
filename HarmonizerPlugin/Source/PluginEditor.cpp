@@ -96,33 +96,27 @@ void HarmonizerPluginAudioProcessorEditor::resized()
 
 void HarmonizerPluginAudioProcessorEditor::sliderValueChanged(Slider * slider)
 {
-	//if (slider == &m_sliderModFreq)
-	//{
+	if (slider == &transposeSlider)
+	{
+		processor.setParameter(0, transposeSlider.getValue());
+	}
 
-	//	//processor.fModFreq = m_sliderModFreq.getValue();
-	//	processor.setParameter(0, m_sliderModFreq.getValue());
+	if (slider == &outputGainSlider)
+	{
+	}
 
+	if (slider == &inputGainSlider)
+	{
+	}
 
-	//}
-	//else if (slider == &m_sliderModWidth)
-	//{
-	//	//processor.fModWidth = m_sliderModWidth.getValue();
-	//	processor.setParameter(1, m_sliderModWidth.getValue());
+	if (slider == &LeftSlider)
+	{
+	}
 
-	//}
-}
-
-void HarmonizerPluginAudioProcessorEditor::initializeSlider(Slider & slider, float Min, float Max, float Interval, float x, float y, float width, float height, const String & displayText, float fdefault)
-{
-	slider.setSliderStyle(Slider::LinearBarVertical);
-	slider.setRange(Min, Max, Interval);
-	slider.setTextValueSuffix(displayText);
-	slider.setValue(fdefault);
-	slider.setBounds(x, y, width, height);
-	slider.setTextBoxStyle(Slider::NoTextBox, false, 90, 0);
-	slider.addListener(this);
-	addAndMakeVisible(&slider);
-}
+	if (slider == &RightSlider)
+	{
+	}	
+}	
 
 void HarmonizerPluginAudioProcessorEditor::comboBoxChanged(ComboBox *)
 {

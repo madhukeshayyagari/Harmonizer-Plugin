@@ -3,6 +3,7 @@
 #include <ctime>
 #include <limits>
 #include <math.h>
+#include <sstream>
 // project header
 #include "ErrorDef.h"
 #include "Harmony.h"

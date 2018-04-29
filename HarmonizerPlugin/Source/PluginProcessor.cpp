@@ -202,11 +202,24 @@ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 
 void HarmonizerPluginAudioProcessor::setParameter(int iParamIdx, float fNewValue)
 {
-	if (iParamIdx == 0)
+	switch (iParamIdx)
 	{
-		m_pitchShiftFac = fNewValue;
-		pCHarmony->setParam(m_pitchShiftFac);
-
+	case koutputGain:
+		pCHarmony->outputGainDB = fNewValue;
+		pCHarmony->ProcessGain();
+		break;
+	case kinputGain:
+		pCHarmony->inputGainDB = fNewValue;
+		pCHarmony->ProcessGain();
+		break;
+	case kpanLeft:
+		pCHarmony->panLPer = fNewValue;
+		pCHarmony->ProcessPan();
+		break;
+	case kpanRight:
+		pCHarmony->panRPer = fNewValue;
+		pCHarmony->ProcessPan();
+		break;
 	}
 }
 

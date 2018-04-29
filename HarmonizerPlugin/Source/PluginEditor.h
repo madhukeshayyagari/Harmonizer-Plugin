@@ -34,8 +34,8 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     HarmonizerPluginAudioProcessor& processor;
-	Slider outputGainSlider, transposeSlider, inputGainSlider, LeftSlider, RightSlider;
-	ComboBox PitchComboBox ;
+	Slider outputGainSlider, inputGainSlider, LeftPanSlider, RightPanSlider;
+	ComboBox PitchComboBox, ScaleComboBox ;
 	ScopedPointer<ResizableCornerComponent> resizer;
 	ComponentBoundsConstrainer resizeLimits;
 

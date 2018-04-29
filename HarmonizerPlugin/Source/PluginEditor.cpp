@@ -23,47 +23,38 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
     outputGainSlider.addListener(this);
 	outputGainSlider.setRange(-30, 6, 0.1);
 
-	addAndMakeVisible(&transposeSlider);
-	transposeSlider.setSliderStyle(Slider::Rotary);
-	transposeSlider.addListener(this);
-	transposeSlider.setRange(-12, 12, 0.1);
-	transposeSlider.setColour(Slider::rotarySliderFillColourId, Colour(0xfbffffff));
-	transposeSlider.setColour(Slider::rotarySliderOutlineColourId, Colour(0xff3c3c54));
-
 	addAndMakeVisible(&inputGainSlider);
 	inputGainSlider.setSliderStyle(Slider::LinearHorizontal);
 	inputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
 	inputGainSlider.addListener(this);
 	inputGainSlider.setRange(-30, 6, 0.1);
 
-	addAndMakeVisible(&LeftSlider);
-	LeftSlider.setSliderStyle(Slider::LinearBarVertical);
-	LeftSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
-	LeftSlider.addListener(this);
-	LeftSlider.setRange(-30, 6, 0.1);
+	addAndMakeVisible(&LeftPanSlider);
+	LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);
+	LeftPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
+	LeftPanSlider.addListener(this);
+	LeftPanSlider.setRange(-30, 6, 0.1);
 
-	addAndMakeVisible(&RightSlider);
-	RightSlider.setSliderStyle(Slider::LinearBarVertical);
-	RightSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
-	RightSlider.addListener(this);
-	RightSlider.setRange(-30, 6, 0.1);
+	addAndMakeVisible(&RightPanSlider);
+	RightPanSlider.setSliderStyle(Slider::LinearBarVertical);
+	RightPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
+	RightPanSlider.addListener(this);
+	RightPanSlider.setRange(-30, 6, 0.1);
 
 	addAndMakeVisible(&PitchComboBox);
 	PitchComboBox.setEditableText(false);
 	PitchComboBox.setJustificationType(Justification::left);
-	PitchComboBox.addItem("1",1);
-	PitchComboBox.addItem("2", 2);
-	PitchComboBox.addItem("3", 3);
-	PitchComboBox.addItem("4", 4);
-	PitchComboBox.addItem("5", 5);
-	PitchComboBox.addItem("6", 6);
-	PitchComboBox.addItem("7", 7);
-	PitchComboBox.addItem("8", 8);
-	PitchComboBox.addItem("9", 9);
-	PitchComboBox.addItem("10", 10);
-	PitchComboBox.addItem("11", 11);
-	PitchComboBox.addItem("12", 12);
+	PitchComboBox.addItem("Third",1);
+	PitchComboBox.addItem("Fifth", 2);
+	PitchComboBox.addItem("Seventh", 3);
 	PitchComboBox.addListener(this);
+
+	addAndMakeVisible(&ScaleComboBox);
+	ScaleComboBox.setEditableText(false);
+	ScaleComboBox.setJustificationType(Justification::left);
+	ScaleComboBox.addItem("Major", 1);
+	ScaleComboBox.addItem("Minor", 2);
+	ScaleComboBox.addListener(this);
 	
 	addAndMakeVisible(resizer = new ResizableCornerComponent(this, &resizeLimits));
 	resizeLimits.setSizeLimits(800, 600, 800, 600);
@@ -88,37 +79,43 @@ void HarmonizerPluginAudioProcessorEditor::resized()
     // subcomponents in your editor..
 	outputGainSlider.setBounds(400, 125, 150, 40);
 	inputGainSlider.setBounds(250, 125, 150, 40);
-	transposeSlider.setBounds(30, 125, 150, 40);
-	LeftSlider.setBounds(30, 250, 20, 150);
-	RightSlider.setBounds(90, 250, 20, 150);
-	PitchComboBox.setBounds(180, 245, 150, 30);
+	LeftPanSlider.setBounds(30, 250, 20, 150);
+	RightPanSlider.setBounds(90, 250, 20, 150);
+	PitchComboBox.setBounds(400, 245, 150, 30);
+	ScaleComboBox.setBounds(180, 245, 150, 30);
 }
 
 void HarmonizerPluginAudioProcessorEditor::sliderValueChanged(Slider * slider)
 {
-	if (slider == &transposeSlider)
-	{
-		processor.setParameter(0, transposeSlider.getValue());
-	}
-
+	
 	if (slider == &outputGainSlider)
 	{
+		processor.setParameter(HarmonizerPluginAudioProcessor::koutputGain, (float)outputGainSlider.getValue());
 	}
 
 	if (slider == &inputGainSlider)
 	{
+		processor.setParameter(HarmonizerPluginAudioProcessor::kinputGain, (float)inputGainSlider.getValue());
 	}
 
-	if (slider == &LeftSlider)
+	if (slider == &LeftPanSlider)
 	{
+		processor.setParameter(HarmonizerPluginAudioProcessor::kpanLeft, (float)LeftPanSlider.getValue());
 	}
 
-	if (slider == &RightSlider)
+	if (slider == &RightPanSlider)
 	{
+		processor.setParameter(HarmonizerPluginAudioProcessor::kpanRight, (float)RightPanSlider.getValue());
 	}	
 }	
 
-void HarmonizerPluginAudioProcessorEditor::comboBoxChanged(ComboBox *)
+void HarmonizerPluginAudioProcessorEditor::comboBoxChanged(ComboBox *comboBox)
 {
+	if (comboBox == &PitchComboBox) {
+
+	}
+	if (comboBox == &ScaleComboBox) {
+
+	}
 }
 

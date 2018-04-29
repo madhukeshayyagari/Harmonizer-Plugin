@@ -57,11 +57,30 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 	void setParameter(int paramIdx, float fNewValue) override;
 
+	enum Parameters {
+	 koutputGain,
+	 kinputGain,
+	 kpanLeft,
+	 kpanRight
+	};
+
+	enum Key {
+		Third =  1,
+		Fifth,
+		Seventh
+	};
+
+	enum Scales {
+		Major =1,
+		Minor
+	};
+
 private:
     //==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HarmonizerPluginAudioProcessor)
 
 		CHarmony* pCHarmony;
 		float m_pitchShiftFac;
-		float m_pitchShiftInit = 2;
+		float m_pitchShiftInit;
+		
 };

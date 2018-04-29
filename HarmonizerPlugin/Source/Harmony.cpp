@@ -90,11 +90,29 @@ Error_t CHarmony::setParam(float PitchShiftFactor) {
 	return kNoError;
 }
 
-Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
+Error_t CHarmony::ProcessGain() {
+
+	if (outputGainDB != -30)
+		m_outputGainConverted = pow(10., (outputGainDB / 20.));
+	else
+		m_outputGainConverted = 0;
+
+	if (inputGainDB != -30)
+		m_inputGainConverted = pow(10., (inputGainDB / 20.));
+	else
+		m_inputGainConverted = 0;
+	return kNoError;
+}
+
+Error_t CHarmony::ProcessPan()
 {
-	if (!m_bIsInitialized)
-		return kNotInitializedError;
-	
+	m_panLConverted = panLPer / 100.0;
+	m_panRConverted = panRPer / 100.0;
+	return kNoError;
+	}
+
+Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
+{	
 	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
 //    float factor = 1 / m_PitchShiftFactor -1; // used for interpolation
     
@@ -158,6 +176,17 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
             temp = 0;
         }
     }
+
+	for (int i = 0; i < m_iNumChannels; i++) {
+		for (int j = 0; j < iNumberOfFrames; j++) {
+			if (i = 0) {
+				ppfOutputBuffer[i][j] = (ppfInputBuffer[i][j] * m_inputGainConverted)*m_panLConverted + (ppfOutputBuffer[i][j] * m_outputGainConverted)*m_panLConverted;
+			}
+			if (i = 1) {
+				ppfOutputBuffer[i][j] = (ppfInputBuffer[i][j] * m_inputGainConverted)*m_panRConverted + (ppfOutputBuffer[i][j] * m_outputGainConverted)*m_panRConverted;
+			}
+		}
+	}
 
 //float LengthOfAudio = iNumberOfFrames*iCounter;
 

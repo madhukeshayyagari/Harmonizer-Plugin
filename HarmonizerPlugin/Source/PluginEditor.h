@@ -39,5 +39,9 @@ private:
 	ScopedPointer<ResizableCornerComponent> resizer;
 	ComponentBoundsConstrainer resizeLimits;
 
+	GroupComponent* groupComponent;
+	GroupComponent* groupComponent2;
+	Label authorsLabel, groupLabel1,groupLabel2,outputLabel,inputLabel,leftPanLabel,rightPanLabel,scaleLabel;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HarmonizerPluginAudioProcessorEditor)
 };

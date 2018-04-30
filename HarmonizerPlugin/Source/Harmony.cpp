@@ -111,6 +111,30 @@ Error_t CHarmony::ProcessPan()
 	return kNoError;
 	}
 
+Error_t CHarmony::ProcessPitchFactor()
+{
+	if (pitchId == 1 && scaleId == 1) {
+
+	}
+	if (pitchId == 1 && scaleId == 2) {
+
+	}
+	if (pitchId == 2 && scaleId == 1) {
+
+	}
+	if (pitchId == 2 && scaleId == 2) {
+
+	}
+	if (pitchId == 3 && scaleId == 1) {
+
+	}
+	if (pitchId == 3 && scaleId == 2) {
+
+	}
+
+	return kNoError;
+}
+
 Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
 	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);

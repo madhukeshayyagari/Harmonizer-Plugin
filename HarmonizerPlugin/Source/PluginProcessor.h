@@ -61,7 +61,9 @@ public:
 	 koutputGain,
 	 kinputGain,
 	 kpanLeft,
-	 kpanRight
+	 kpanRight,
+	 kpitchCombo,
+	 kscaleCombo
 	};
 
 	enum Key {

@@ -220,6 +220,12 @@ void HarmonizerPluginAudioProcessor::setParameter(int iParamIdx, float fNewValue
 		pCHarmony->panRPer = fNewValue;
 		pCHarmony->ProcessPan();
 		break;
+	case kpitchCombo:
+		pCHarmony->pitchId = fNewValue;
+		break;
+	case kscaleCombo:
+		pCHarmony->scaleId = fNewValue;
+		break;
 	}
 }
 

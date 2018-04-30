@@ -18,10 +18,13 @@ public:
 	Error_t process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames);
 	Error_t CHarmony::ProcessGain();
 	Error_t CHarmony::ProcessPan();
+	Error_t CHarmony::ProcessPitchFactor();
 	float   panLPer;
 	float   panRPer;
 	float   outputGainDB;
 	float   inputGainDB;
+	int		pitchId;
+	int		scaleId;
 
 private:
 

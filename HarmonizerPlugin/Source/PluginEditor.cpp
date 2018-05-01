@@ -28,13 +28,13 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
 	outputGainSlider.setSliderStyle(Slider::LinearHorizontal);
 	outputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
     outputGainSlider.addListener(this);
-	outputGainSlider.setRange(-30, 6, 0.1);
+	outputGainSlider.setRange(-30, -9.0, 0.1);
 
 	addAndMakeVisible(&inputGainSlider);
 	inputGainSlider.setSliderStyle(Slider::LinearHorizontal);
 	inputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
 	inputGainSlider.addListener(this);
-	inputGainSlider.setRange(-30, 6, 0.1);
+	inputGainSlider.setRange(0, 6, 0.1);
 
 	addAndMakeVisible(&LeftPanSlider);
 	LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);

@@ -184,6 +184,10 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
         for (int c = 0; c < iNumberOfFrames; c++) {
             ppfOutputBuffer[i][c] = temp[(int)ceil(c*m_PitchShiftFactor)] + (temp[(int)ceil(c*m_PitchShiftFactor)] - temp[(int)floor(c*m_PitchShiftFactor)])*(m_PitchShiftFactor-1);
         }
+        
+//                    int windowlen = ceil(iNumberOfFrames / m_PitchShiftFactor);
+//                    for (int n = 0; n < iNumberOfFrames; n++)
+//                        ppfOutputBuffer[i][n] = 0.5f*(1.0f - cos(2 * pi*(float)n / (iNumberOfFrames))) * ppfOutputBuffer[i][n];
     
     }
     

@@ -15,7 +15,7 @@ public:
 	Error_t init(float fSampleRateInHz, float fPitchShiftFactor, int iNumChannels);
 	Error_t reset();
 	Error_t setParam(float fPitchShiftFactor);
-	Error_t process(float **ppfPreviousBuffer, float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames);
+	Error_t processHarmony(float **ppfPreviousBuffer, float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames);
     Error_t ProcessGain();
     Error_t ProcessPan();
     Error_t ProcessPitchFactor();

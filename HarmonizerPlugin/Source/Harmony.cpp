@@ -137,9 +137,10 @@ Error_t CHarmony::ProcessPitchFactor()
 	return kNoError;
 }
 
-Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
+Error_t CHarmony::processHarmony(float **ppfPreviousBuffer,float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
 	//float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
+    
     
     std::cout<<m_PitchShiftFactor<<"\n";
     
@@ -162,6 +163,8 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
     
     for (int i = 0; i < m_iNumChannels; i++) {
         
+        cout << "channel" << endl;
+        cout << i << endl;
         float *temp = 0;
         temp = new float[iNumberOfFrames*2];
         
@@ -183,6 +186,10 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
         // re-sample
         for (int c = 0; c < iNumberOfFrames; c++) {
             ppfOutputBuffer[i][c] = temp[(int)ceil(c*m_PitchShiftFactor)] + (temp[(int)ceil(c*m_PitchShiftFactor)] - temp[(int)floor(c*m_PitchShiftFactor)])*(m_PitchShiftFactor-1);
+            
+            std::cout<<ppfOutputBuffer[i][c]<<"\n";
+            
+            
         }
         
 //        float *window = 0;
@@ -217,7 +224,7 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
 //            }
 //        }
 //
-		return kNoError;
+		
     }
     
     
@@ -304,13 +311,13 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
 		for (int j = 0; j < iNumberOfFrames; j++) {
             if (i == 0) {
                 ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(cos(pi*m_panLConverted/2));
-//                cout<<ppfOutputBuffer[i][j]<<"\n";
+                
 //                cout<<m_panLConverted<<"\n";
              //cout<<m_outputGainConverted<<"\n";
 			}
             if (i == 1) {
                 ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(sin(pi*m_panRConverted/2));
-//                cout<<ppfOutputBuffer[i][j]<<"\n";
+                
 //                cout<<m_panRConverted<<"\n";
 //                cout<<m_inputGainConverted<<"\n";
 			}

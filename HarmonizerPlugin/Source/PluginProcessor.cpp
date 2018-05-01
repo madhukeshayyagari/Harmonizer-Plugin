@@ -103,6 +103,7 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 
+    std::cout<< samplesPerBlock <<std::endl;
 	auto totalNumInputChannels = getTotalNumInputChannels();
 	pCHarmony->create(pCHarmony);
 	pCHarmony->init((float)this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
@@ -186,11 +187,11 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     
     
     
+    std::cout<<"prepare to process"<<std::endl;
     
-    
-	pCHarmony->process(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+	pCHarmony->processHarmony(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
     auto** doublechanneldata = (float**)buffer.getArrayOfReadPointers();
-    std::cout<<buffer.getNumSamples()<<"\n";
+    //std::cout<<buffer.getNumSamples()<<"\n";
     for (int i=0; i< totalNumInputChannels; i++) {
         for (int j =0; j<buffer.getNumSamples(); j++) {
             ppfoldbuffer[i][j] = doublechanneldata[i][j];

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT name="HarmonizerPlugin" projectType="audioplug" buildStandalone="1"
-              jucerVersion="5.3.1" pluginFormats="buildVST,buildStandalone"
+              jucerVersion="5.2.1" pluginFormats="buildVST,buildStandalone"
               buildVST="1" buildVST3="0" buildAU="0" buildAUv3="0" buildRTAS="0"
               buildAAX="0" enableIAA="0">
   <MAINGROUP id="yAG9Wx" name="HarmonizerPlugin">

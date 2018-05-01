@@ -116,22 +116,22 @@ Error_t CHarmony::ProcessPan()
 Error_t CHarmony::ProcessPitchFactor()
 {
 	if (pitchId == 1 && scaleId == 1) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 4.0f);
 	}
 	if (pitchId == 1 && scaleId == 2) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 3.0f);
 	}
 	if (pitchId == 2 && scaleId == 1) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 7.0f);
 	}
 	if (pitchId == 2 && scaleId == 2) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 6.0f);
 	}
 	if (pitchId == 3 && scaleId == 1) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 11.0f);
 	}
 	if (pitchId == 3 && scaleId == 2) {
-
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 10.0f);
 	}
 
 	return kNoError;
@@ -140,6 +140,8 @@ Error_t CHarmony::ProcessPitchFactor()
 Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
 	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
+    
+    std::cout<<m_PitchShiftFactor<<"\n";
     
     m_tempBuff = new float* [m_iNumChannels];
     for (int i =0; i<m_iNumChannels;i++) {

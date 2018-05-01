@@ -115,7 +115,9 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
     }
     
     for (int i =0; i< totalNumInputChannels; i++) {
-        ppfoldbuffer[i] = 0;
+        for ( int j =0; j< samplesPerBlock; j++) {
+        ppfoldbuffer[i][j] = 0;
+        }
     }
     
 }
@@ -184,9 +186,16 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     
     
     
-	pCHarmony->process(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
     
-    ppfoldbuffer = (float**)buffer.getArrayOfReadPointers();
+    
+	pCHarmony->process(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    auto** doublechanneldata = (float**)buffer.getArrayOfReadPointers();
+    std::cout<<buffer.getNumSamples()<<"\n";
+    for (int i=0; i< totalNumInputChannels; i++) {
+        for (int j =0; j<buffer.getNumSamples(); j++) {
+            ppfoldbuffer[i][j] = doublechanneldata[i][j];
+        }
+    }
     
 }
 
@@ -244,9 +253,11 @@ void HarmonizerPluginAudioProcessor::setParameter(int iParamIdx, float fNewValue
 		break;
 	case kpitchCombo:
 		pCHarmony->pitchId = fNewValue;
+        pCHarmony->ProcessPitchFactor();
 		break;
 	case kscaleCombo:
 		pCHarmony->scaleId = fNewValue;
+        pCHarmony->ProcessPitchFactor();
 		break;
 	}
 }

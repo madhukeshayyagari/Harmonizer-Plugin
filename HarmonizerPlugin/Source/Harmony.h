@@ -21,8 +21,8 @@ public:
     Error_t ProcessPitchFactor();
 	float   panLPer;
 	float   panRPer;
-	float   outputGainDB;
-	float   inputGainDB;
+	float   outputGainDB = -9.0f;
+	float   inputGainDB = 0.0f;
 	int		pitchId;
 	int		scaleId;
 
@@ -35,8 +35,8 @@ private:
 	int     m_iNumChannels;
 	float   m_PitchShiftFactor;
 	float   m_OverLapFactor;
-	float   m_outputGainConverted=1.0f;
-	float   m_inputGainConverted=1.0f;
+    float   m_outputGainConverted;
+	float   m_inputGainConverted;
 	float   m_panLConverted=0.5f;
 	float	m_panRConverted=0.5f;
     

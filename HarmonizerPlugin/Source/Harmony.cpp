@@ -185,10 +185,38 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
             ppfOutputBuffer[i][c] = temp[(int)ceil(c*m_PitchShiftFactor)] + (temp[(int)ceil(c*m_PitchShiftFactor)] - temp[(int)floor(c*m_PitchShiftFactor)])*(m_PitchShiftFactor-1);
         }
         
-//                    int windowlen = ceil(iNumberOfFrames / m_PitchShiftFactor);
-//                    for (int n = 0; n < iNumberOfFrames; n++)
-//                        ppfOutputBuffer[i][n] = 0.5f*(1.0f - cos(2 * pi*(float)n / (iNumberOfFrames))) * ppfOutputBuffer[i][n];
-    
+//        float *window = 0;
+//        window = new float[iNumberOfFrames];
+//
+//        if (iNumberOfFrames % 2 != 0) {
+//            for (int c = 0; c < iNumberOfFrames/2; c++) {
+//                window[c] = window[iNumberOfFrames-c-1]=window[c] * (2.0*(c+1)/(iNumberOfFrames+1));
+//            }
+//            window[iNumberOfFrames/2] = 1.0;
+//        } else {
+//            for (int c = 0; c < iNumberOfFrames/2; c++) {
+//                window[c] = window[iNumberOfFrames-c-1]=window[c] * (2.0*(c+1)/(iNumberOfFrames));
+//            }
+//        }
+//
+//        for (int c = 0; c < iNumberOfFrames; c++) {
+//            ppfOutputBuffer[i][c] *= window[c];
+//        }
+//
+//        delete[] window;
+//        window = 0;
+        
+        
+//        int count_tri = 1;
+//        for (int c = 0; c < iNumberOfFrames; c++) {
+//            if (c <= iNumberOfFrames/2) {
+//                ppfOutputBuffer[i][c] = ppfOutputBuffer[i][c] * c * (1/(iNumberOfFrames/2));
+//            } else {
+//                ppfOutputBuffer[i][c] = ppfOutputBuffer[i][c] * (1 - count_tri * (1/(iNumberOfFrames/2)));
+//                count_tri++;
+//            }
+//        }
+//
     }
     
     

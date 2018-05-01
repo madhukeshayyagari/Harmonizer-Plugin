@@ -11,8 +11,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
-HarmonizerPluginAudioProcessor::HarmonizerPluginAudioProcessor()
+HarmonizerPlugin1AudioProcessor::HarmonizerPlugin1AudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -24,24 +25,21 @@ HarmonizerPluginAudioProcessor::HarmonizerPluginAudioProcessor()
                        )
 #endif
 {
-	pCHarmony = 0;
-
+    pCHarmony = 0;
 }
 
-HarmonizerPluginAudioProcessor::~HarmonizerPluginAudioProcessor()
+HarmonizerPlugin1AudioProcessor::~HarmonizerPlugin1AudioProcessor()
 {
-	pCHarmony->destroy(pCHarmony);
-    
-    
+    pCHarmony->destroy(pCHarmony);
 }
 
 //==============================================================================
-const String HarmonizerPluginAudioProcessor::getName() const
+const String HarmonizerPlugin1AudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool HarmonizerPluginAudioProcessor::acceptsMidi() const
+bool HarmonizerPlugin1AudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -50,7 +48,7 @@ bool HarmonizerPluginAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool HarmonizerPluginAudioProcessor::producesMidi() const
+bool HarmonizerPlugin1AudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -59,7 +57,7 @@ bool HarmonizerPluginAudioProcessor::producesMidi() const
    #endif
 }
 
-bool HarmonizerPluginAudioProcessor::isMidiEffect() const
+bool HarmonizerPlugin1AudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -68,46 +66,46 @@ bool HarmonizerPluginAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double HarmonizerPluginAudioProcessor::getTailLengthSeconds() const
+double HarmonizerPlugin1AudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int HarmonizerPluginAudioProcessor::getNumPrograms()
+int HarmonizerPlugin1AudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int HarmonizerPluginAudioProcessor::getCurrentProgram()
+int HarmonizerPlugin1AudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void HarmonizerPluginAudioProcessor::setCurrentProgram (int index)
+void HarmonizerPlugin1AudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const String HarmonizerPluginAudioProcessor::getProgramName (int index)
+const String HarmonizerPlugin1AudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void HarmonizerPluginAudioProcessor::changeProgramName (int index, const String& newName)
+void HarmonizerPlugin1AudioProcessor::changeProgramName (int index, const String& newName)
 {
 }
 
 //==============================================================================
-void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void HarmonizerPlugin1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-
+    
     std::cout<< samplesPerBlock <<std::endl;
-	auto totalNumInputChannels = getTotalNumInputChannels();
-	pCHarmony->create(pCHarmony);
-	pCHarmony->init((float)this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
-	pCHarmony->setParam(m_pitchShiftInit);
+    auto totalNumInputChannels = getTotalNumInputChannels();
+    pCHarmony->create(pCHarmony);
+    pCHarmony->init((float)this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
+    pCHarmony->setParam(m_pitchShiftInit);
     
     ppfoldbuffer = new float*[totalNumInputChannels];
     
@@ -117,21 +115,19 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
     
     for (int i =0; i< totalNumInputChannels; i++) {
         for ( int j =0; j< samplesPerBlock; j++) {
-        ppfoldbuffer[i][j] = 0;
+            ppfoldbuffer[i][j] = 0;
         }
     }
-    
 }
 
-void HarmonizerPluginAudioProcessor::releaseResources()
+void HarmonizerPlugin1AudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool HarmonizerPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool HarmonizerPlugin1AudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     ignoreUnused (layouts);
@@ -154,12 +150,13 @@ bool HarmonizerPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& 
 }
 #endif
 
-void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void HarmonizerPlugin1AudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
+    
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
+    
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -168,7 +165,7 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
+    
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
@@ -178,10 +175,10 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     //for (int channel = 0; channel < totalNumInputChannels; ++channel)
     //{
     //    auto* channelData = buffer.getWritePointer (channel);
-
+    
     //    // ..do something to the data...
     //}
-
+    
     
     
     
@@ -189,7 +186,7 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     
     std::cout<<"prepare to process"<<std::endl;
     
-	pCHarmony->processHarmony(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    pCHarmony->processHarmony(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
     auto** doublechanneldata = (float**)buffer.getArrayOfReadPointers();
     //std::cout<<buffer.getNumSamples()<<"\n";
     for (int i=0; i< totalNumInputChannels; i++) {
@@ -197,29 +194,28 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
             ppfoldbuffer[i][j] = doublechanneldata[i][j];
         }
     }
-    
 }
 
 //==============================================================================
-bool HarmonizerPluginAudioProcessor::hasEditor() const
+bool HarmonizerPlugin1AudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-AudioProcessorEditor* HarmonizerPluginAudioProcessor::createEditor()
+AudioProcessorEditor* HarmonizerPlugin1AudioProcessor::createEditor()
 {
-    return new HarmonizerPluginAudioProcessorEditor (*this);
+    return new HarmonizerPlugin1AudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void HarmonizerPluginAudioProcessor::getStateInformation (MemoryBlock& destData)
+void HarmonizerPlugin1AudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
 }
 
-void HarmonizerPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void HarmonizerPlugin1AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -229,37 +225,36 @@ void HarmonizerPluginAudioProcessor::setStateInformation (const void* data, int 
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new HarmonizerPluginAudioProcessor();
+    return new HarmonizerPlugin1AudioProcessor();
 }
 
-void HarmonizerPluginAudioProcessor::setParameter(int iParamIdx, float fNewValue)
+void HarmonizerPlugin1AudioProcessor::setParameter(int iParamIdx, float fNewValue)
 {
-	switch (iParamIdx)
-	{
-	case koutputGain:
-		pCHarmony->outputGainDB = fNewValue;
-		pCHarmony->ProcessGain();
-		break;
-	case kinputGain:
-		pCHarmony->inputGainDB = fNewValue;
-		pCHarmony->ProcessGain();
-		break;
-	case kpanLeft:
-		pCHarmony->panLPer = fNewValue;
-		pCHarmony->ProcessPan();
-		break;
-	case kpanRight:
-		pCHarmony->panRPer = fNewValue;
-		pCHarmony->ProcessPan();
-		break;
-	case kpitchCombo:
-		pCHarmony->pitchId = fNewValue;
-        pCHarmony->ProcessPitchFactor();
-		break;
-	case kscaleCombo:
-		pCHarmony->scaleId = fNewValue;
-        pCHarmony->ProcessPitchFactor();
-		break;
-	}
+    switch (iParamIdx)
+    {
+        case koutputGain:
+            pCHarmony->outputGainDB = fNewValue;
+            pCHarmony->ProcessGain();
+            break;
+        case kinputGain:
+            pCHarmony->inputGainDB = fNewValue;
+            pCHarmony->ProcessGain();
+            break;
+        case kpanLeft:
+            pCHarmony->panLPer = fNewValue;
+            pCHarmony->ProcessPan();
+            break;
+        case kpanRight:
+            pCHarmony->panRPer = fNewValue;
+            pCHarmony->ProcessPan();
+            break;
+        case kpitchCombo:
+            pCHarmony->pitchId = fNewValue;
+            pCHarmony->ProcessPitchFactor();
+            break;
+        case kscaleCombo:
+            pCHarmony->scaleId = fNewValue;
+            pCHarmony->ProcessPitchFactor();
+            break;
+    }
 }
-

@@ -13,35 +13,38 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "PluginProcessor.h"
 
+
 //==============================================================================
 /**
 */
-class HarmonizerPluginAudioProcessorEditor  : public AudioProcessorEditor,
-	public Slider::Listener,
-	public ComboBox::Listener
+class HarmonizerPlugin1AudioProcessorEditor  : public AudioProcessorEditor,
+public Slider::Listener,
+public ComboBox::Listener
 {
 public:
-    HarmonizerPluginAudioProcessorEditor (HarmonizerPluginAudioProcessor&);
-    ~HarmonizerPluginAudioProcessorEditor();
+    HarmonizerPlugin1AudioProcessorEditor (HarmonizerPlugin1AudioProcessor&);
+    ~HarmonizerPlugin1AudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-	void sliderValueChanged(Slider* slider) override;
-	void comboBoxChanged(ComboBox*) override;
-
+    void sliderValueChanged(Slider* slider) override;
+    void comboBoxChanged(ComboBox*) override;
+    
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    HarmonizerPluginAudioProcessor& processor;
-	Slider outputGainSlider, inputGainSlider, LeftPanSlider, RightPanSlider;
-	ComboBox PitchComboBox, ScaleComboBox ;
-	
-	
+    HarmonizerPlugin1AudioProcessor& processor;
+    Slider outputGainSlider, inputGainSlider, LeftPanSlider, RightPanSlider;
+    ComboBox PitchComboBox, ScaleComboBox ;
+    
+    
+    
+    GroupComponent* groupComponent;
+    GroupComponent* groupComponent2;
+    Label authorsLabel, groupLabel1,groupLabel2,outputLabel,inputLabel,leftPanLabel,rightPanLabel,scaleLabel;
 
-	GroupComponent* groupComponent;
-	GroupComponent* groupComponent2;
-	Label authorsLabel, groupLabel1,groupLabel2,outputLabel,inputLabel,leftPanLabel,rightPanLabel,scaleLabel;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HarmonizerPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HarmonizerPlugin1AudioProcessorEditor)
 };
+
+

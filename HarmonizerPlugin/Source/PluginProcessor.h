@@ -13,15 +13,17 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Harmony.h"
 #include "ErrorDef.h"
+
+
 //==============================================================================
 /**
 */
-class HarmonizerPluginAudioProcessor  : public AudioProcessor
+class HarmonizerPlugin1AudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    HarmonizerPluginAudioProcessor();
-    ~HarmonizerPluginAudioProcessor();
+    HarmonizerPlugin1AudioProcessor();
+    ~HarmonizerPlugin1AudioProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -55,35 +57,34 @@ public:
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-	void setParameter(int paramIdx, float fNewValue) override;
-
-	enum Parameters {
-	 koutputGain,
-	 kinputGain,
-	 kpanLeft,
-	 kpanRight,
-	 kpitchCombo,
-	 kscaleCombo
-	};
-
-	enum Key {
-		Third =  1,
-		Fifth,
-		Seventh
-	};
-
-	enum Scales {
-		Major =1,
-		Minor
-	};
+    void setParameter(int paramIdx, float fNewValue) override;
+    
+    enum Parameters {
+        koutputGain,
+        kinputGain,
+        kpanLeft,
+        kpanRight,
+        kpitchCombo,
+        kscaleCombo
+    };
+    
+    enum Key {
+        Third =  1,
+        Fifth,
+        Seventh
+    };
+    
+    enum Scales {
+        Major =1,
+        Minor
+    };
 
 private:
     //==============================================================================
-	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HarmonizerPluginAudioProcessor)
-
-		CHarmony* pCHarmony = 0;
-		float** ppfoldbuffer = 0;
-		float m_pitchShiftFac = 1.0f;
-		float const m_pitchShiftInit = 1.0f;
-		
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HarmonizerPlugin1AudioProcessor)
+    
+    CHarmony* pCHarmony = 0;
+    float** ppfoldbuffer = 0;
+    float m_pitchShiftFac = 1.0f;
+    float const m_pitchShiftInit = 1.0f;
 };

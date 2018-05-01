@@ -31,6 +31,8 @@ HarmonizerPluginAudioProcessor::HarmonizerPluginAudioProcessor()
 HarmonizerPluginAudioProcessor::~HarmonizerPluginAudioProcessor()
 {
 	pCHarmony->destroy(pCHarmony);
+    
+    
 }
 
 //==============================================================================
@@ -105,12 +107,24 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 	pCHarmony->create(pCHarmony);
 	pCHarmony->init(this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
 	pCHarmony->setParam(m_pitchShiftInit);
+    
+    ppfoldbuffer = new float*[totalNumInputChannels];
+    
+    for (int i =0; i< totalNumInputChannels; i++) {
+        ppfoldbuffer[i] = new float[samplesPerBlock];
+    }
+    
+    for (int i =0; i< totalNumInputChannels; i++) {
+        ppfoldbuffer[i] = 0;
+    }
+    
 }
 
 void HarmonizerPluginAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -165,7 +179,15 @@ void HarmonizerPluginAudioProcessor::processBlock (AudioBuffer<float>& buffer, M
     //    // ..do something to the data...
     //}
 
-	pCHarmony->process((float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    
+    
+    
+    
+    
+	pCHarmony->process(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
+    
+    ppfoldbuffer = (float**)buffer.getArrayOfReadPointers();
+    
 }
 
 //==============================================================================

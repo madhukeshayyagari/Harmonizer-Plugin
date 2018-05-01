@@ -137,7 +137,7 @@ Error_t CHarmony::ProcessPitchFactor()
 	return kNoError;
 }
 
-Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
+Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
 	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
     
@@ -158,6 +158,47 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
     }
     
     
+    for (int i = 0; i < m_iNumChannels; i++) {
+        
+        float *temp = 0;
+        temp = new float[iNumberOfFrames*2];
+        
+        // populating the longer buffer
+        int count = 0;
+        for (int j = 0; j < iNumberOfFrames*2; j++) {
+            if (count == iNumberOfFrames) {
+                count = 0;
+            }
+            if (j < iNumberOfFrames) {
+                temp[j] = ppfPreviousBuffer[i][j];
+            } else {
+                temp[j] = ppfInputBuffer[i][count];
+            }
+            count++;
+    
+        }
+        
+        // re-sample
+        for (int c = 0; c < iNumberOfFrames; c++) {
+            ppfOutputBuffer[i][c] = temp[(int)ceil(c*m_PitchShiftFactor)] + (temp[(int)ceil(c*m_PitchShiftFactor)] - temp[(int)floor(c*m_PitchShiftFactor)])*(m_PitchShiftFactor-1);
+        }
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+/*
     
 //    float factor = 1 / m_PitchShiftFactor -1; // used for interpolation
     
@@ -221,6 +262,8 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
             temp = 0;
         }
     }
+    
+    */
 
 	for (int i = 0; i < m_iNumChannels; i++) {
 		for (int j = 0; j < iNumberOfFrames; j++) {

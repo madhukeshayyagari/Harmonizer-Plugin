@@ -66,7 +66,7 @@ Error_t CHarmony::init(float fSampleRateInHz, float PitchShiftFactor, int iNumCh
 	
 	m_bIsInitialized = true;
 	m_bLfoIsInitialized = true;
-	m_bRingBufferIsInitialized = true;
+	
 
 	return kNoError;
 }
@@ -79,7 +79,7 @@ Error_t CHarmony::reset()
 	m_iNumChannels = 0;
 	m_bIsInitialized = false;
 	m_bLfoIsInitialized = false;
-	m_bRingBufferIsInitialized = false;
+	
 
 	return kNoError;
 }
@@ -93,45 +93,45 @@ Error_t CHarmony::setParam(float PitchShiftFactor) {
 Error_t CHarmony::ProcessGain() {
 
     
-    if (outputGainDB != -30){
-		m_outputGainConverted = pow(10., (outputGainDB / 20.));
+    if (outputGainDB != -30.0f){
+		m_outputGainConverted = pow(10.f, (outputGainDB / 20.f));
         std::cout<<m_outputGainConverted<<"\n";}
 	else
-		m_outputGainConverted = 0;
+		m_outputGainConverted = 0.0f;
 
-	if (inputGainDB != -30)
-		m_inputGainConverted = pow(10., (inputGainDB / 20.));
+	if (inputGainDB != -30.0f)
+		m_inputGainConverted = pow(10.f, (inputGainDB / 20.f));
 	else
-		m_inputGainConverted = 0;
+		m_inputGainConverted = 0.0f;
 	return kNoError;
 }
 
 Error_t CHarmony::ProcessPan()
 {
-	m_panLConverted = panLPer / 100.0;
-	m_panRConverted = panRPer / 100.0;
+	m_panLConverted = panLPer / 100.0f;
+	m_panRConverted = panRPer / 100.0f;
 	return kNoError;
 	}
 
 Error_t CHarmony::ProcessPitchFactor()
 {
 	if (pitchId == 1 && scaleId == 1) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 4.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 4.0f);
 	}
 	if (pitchId == 1 && scaleId == 2) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 3.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 3.0f);
 	}
 	if (pitchId == 2 && scaleId == 1) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 7.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 7.0f);
 	}
 	if (pitchId == 2 && scaleId == 2) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 6.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 6.0f);
 	}
 	if (pitchId == 3 && scaleId == 1) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 11.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 11.0f);
 	}
 	if (pitchId == 3 && scaleId == 2) {
-        m_PitchShiftFactor = pow(pow(2.0f, 1.0/12.0), 10.0f);
+        m_PitchShiftFactor = pow(pow(2.0f, 1.0f/12.0f), 10.0f);
 	}
 
 	return kNoError;
@@ -139,7 +139,7 @@ Error_t CHarmony::ProcessPitchFactor()
 
 Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
-	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
+	//float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
     
     std::cout<<m_PitchShiftFactor<<"\n";
     
@@ -217,6 +217,7 @@ Error_t CHarmony::process(float **ppfPreviousBuffer,float **ppfInputBuffer, floa
 //            }
 //        }
 //
+		return kNoError;
     }
     
     

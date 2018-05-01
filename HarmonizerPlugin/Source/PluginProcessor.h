@@ -80,9 +80,9 @@ public:
 private:
     //==============================================================================
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HarmonizerPluginAudioProcessor)
-    
-		CHarmony* pCHarmony;
-        float** ppfoldbuffer;
+
+		CHarmony* pCHarmony = 0;
+		float** ppfoldbuffer = 0;
 		float m_pitchShiftFac;
 		float const m_pitchShiftInit = 1;
 		

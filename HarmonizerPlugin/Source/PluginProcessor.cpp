@@ -105,7 +105,7 @@ void HarmonizerPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 
 	auto totalNumInputChannels = getTotalNumInputChannels();
 	pCHarmony->create(pCHarmony);
-	pCHarmony->init(this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
+	pCHarmony->init((float)this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
 	pCHarmony->setParam(m_pitchShiftInit);
     
     ppfoldbuffer = new float*[totalNumInputChannels];

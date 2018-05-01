@@ -40,7 +40,7 @@ private:
 	float   m_panLConverted=0.5f;
 	float	m_panRConverted=0.5f;
     
-    float   ** m_tempBuff;
+	float   ** m_tempBuff = 0;
 	virtual ~CHarmony();
 	CHarmony();
 

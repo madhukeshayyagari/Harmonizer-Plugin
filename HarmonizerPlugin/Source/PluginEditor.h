@@ -36,8 +36,8 @@ private:
     HarmonizerPluginAudioProcessor& processor;
 	Slider outputGainSlider, inputGainSlider, LeftPanSlider, RightPanSlider;
 	ComboBox PitchComboBox, ScaleComboBox ;
-	ScopedPointer<ResizableCornerComponent> resizer;
-	ComponentBoundsConstrainer resizeLimits;
+	
+	
 
 	GroupComponent* groupComponent;
 	GroupComponent* groupComponent2;

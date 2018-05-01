@@ -28,13 +28,13 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
 	outputGainSlider.setSliderStyle(Slider::LinearHorizontal);
 	outputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
     outputGainSlider.addListener(this);
-	outputGainSlider.setRange(-30, -9.0, 0.1);
+	outputGainSlider.setRange(-30.0, -9.0, 0.1);
 
 	addAndMakeVisible(&inputGainSlider);
 	inputGainSlider.setSliderStyle(Slider::LinearHorizontal);
 	inputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
 	inputGainSlider.addListener(this);
-	inputGainSlider.setRange(0, 6, 0.1);
+	inputGainSlider.setRange(0.0, 6.0, 0.1);
 
 	addAndMakeVisible(&LeftPanSlider);
 	LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);
@@ -107,8 +107,7 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
 	scaleLabel.setFont(Font(16.0f));
 	scaleLabel.setColour(Label::textColourId, Colours::white);
 	
-	addAndMakeVisible(resizer = new ResizableCornerComponent(this, &resizeLimits));
-	resizeLimits.setSizeLimits(400, 300, 400, 300);
+	
 	setSize (400, 400);
 
 

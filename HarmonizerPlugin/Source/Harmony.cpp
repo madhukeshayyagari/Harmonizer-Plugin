@@ -99,10 +99,8 @@ Error_t CHarmony::ProcessGain() {
 	else
 		m_outputGainConverted = 0.0f;
 
-	if (inputGainDB != -30.0f)
 		m_inputGainConverted = pow(10.f, (inputGainDB / 20.f));
-	else
-		m_inputGainConverted = 0.0f;
+	
 	return kNoError;
 }
 

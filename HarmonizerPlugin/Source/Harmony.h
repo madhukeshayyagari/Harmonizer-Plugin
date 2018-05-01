@@ -21,10 +21,10 @@ public:
     Error_t ProcessPitchFactor();
 	float   panLPer;
 	float   panRPer;
-	float   outputGainDB = -9.0f;
-	float   inputGainDB = 0.0f;
-	int		pitchId;
-	int		scaleId;
+    float   outputGainDB = -9.0f;
+    float   inputGainDB = 0.0f;
+	int		pitchId = 1;
+	int		scaleId = 1;
 
 private:
 

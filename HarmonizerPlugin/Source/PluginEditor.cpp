@@ -30,12 +30,16 @@ scaleLabel("", "Scale")
     outputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
     outputGainSlider.addListener(this);
     outputGainSlider.setRange(-30.0, -9.0, 0.1);
+    outputGainSlider.setValue(-9.0);
+    
     
     addAndMakeVisible(&inputGainSlider);
     inputGainSlider.setSliderStyle(Slider::LinearHorizontal);
     inputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
     inputGainSlider.addListener(this);
     inputGainSlider.setRange(0.0, 6.0, 0.1);
+    inputGainSlider.setValue(0.2);
+    
     
     addAndMakeVisible(&LeftPanSlider);
     LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);

@@ -92,8 +92,10 @@ Error_t CHarmony::setParam(float PitchShiftFactor) {
 
 Error_t CHarmony::ProcessGain() {
 
-	if (outputGainDB != -30)
+    
+    if (outputGainDB != -30){
 		m_outputGainConverted = pow(10., (outputGainDB / 20.));
+        std::cout<<m_outputGainConverted<<"\n";}
 	else
 		m_outputGainConverted = 0;
 
@@ -138,6 +140,25 @@ Error_t CHarmony::ProcessPitchFactor()
 Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames)
 {	
 	float fraction = m_PitchShiftFactor - floor(m_PitchShiftFactor);
+    
+    m_tempBuff = new float* [m_iNumChannels];
+    for (int i =0; i<m_iNumChannels;i++) {
+        m_tempBuff[i] = new float[iNumberOfFrames];
+    }
+    
+    for (int i=0;i<m_iNumChannels;i++) {
+        for (int j=0; j<iNumberOfFrames;j++) {
+            m_tempBuff[i][j] = 0;
+        }
+    }
+    for (int i=0;i<m_iNumChannels;i++) {
+        for (int j=0; j<iNumberOfFrames;j++) {
+            m_tempBuff[i][j] = ppfInputBuffer[i][j];
+        }
+    }
+    
+    
+    
 //    float factor = 1 / m_PitchShiftFactor -1; // used for interpolation
     
     float factor = (iNumberOfFrames-2) / (iNumberOfFrames * (1/m_PitchShiftFactor) - 2);
@@ -203,11 +224,17 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
 
 	for (int i = 0; i < m_iNumChannels; i++) {
 		for (int j = 0; j < iNumberOfFrames; j++) {
-			if (i = 0) {
-				ppfOutputBuffer[i][j] = (ppfInputBuffer[i][j] * m_inputGainConverted)*m_panLConverted + (ppfOutputBuffer[i][j] * m_outputGainConverted)*m_panLConverted;
+            if (i == 0) {
+                ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(cos(pi*m_panLConverted/2));
+//                cout<<ppfOutputBuffer[i][j]<<"\n";
+//                cout<<m_panLConverted<<"\n";
+             //cout<<m_outputGainConverted<<"\n";
 			}
-			if (i = 1) {
-				ppfOutputBuffer[i][j] = (ppfInputBuffer[i][j] * m_inputGainConverted)*m_panRConverted + (ppfOutputBuffer[i][j] * m_outputGainConverted)*m_panRConverted;
+            if (i == 1) {
+                ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(sin(pi*m_panRConverted/2));
+//                cout<<ppfOutputBuffer[i][j]<<"\n";
+//                cout<<m_panRConverted<<"\n";
+//                cout<<m_inputGainConverted<<"\n";
 			}
 		}
 	}
@@ -240,6 +267,12 @@ Error_t CHarmony::process(float **ppfInputBuffer, float **ppfOutputBuffer, int i
 	//	delete[] temp;
 	//	temp = 0;
 	//}
+    
+    for (int i =0; i<m_iNumChannels; i++) {
+        delete [] m_tempBuff[i];
+    }
+    delete [] m_tempBuff;
+    m_tempBuff = 0;
 	return kNoError;
 }
 

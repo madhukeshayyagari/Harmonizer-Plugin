@@ -83,6 +83,6 @@ private:
 
 		CHarmony* pCHarmony;
 		float m_pitchShiftFac;
-		float m_pitchShiftInit;
+		float m_pitchShiftInit = 2;
 		
 };

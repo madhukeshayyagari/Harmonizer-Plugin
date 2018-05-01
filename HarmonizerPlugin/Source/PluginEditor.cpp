@@ -40,13 +40,15 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
 	LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);
 	LeftPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
 	LeftPanSlider.addListener(this);
-	LeftPanSlider.setRange(-30, 6, 0.1);
+	LeftPanSlider.setRange(0,100, 1);
+    LeftPanSlider.setValue(50.0f);
 
 	addAndMakeVisible(&RightPanSlider);
 	RightPanSlider.setSliderStyle(Slider::LinearBarVertical);
 	RightPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
 	RightPanSlider.addListener(this);
-	RightPanSlider.setRange(-30, 6, 0.1);
+    RightPanSlider.setRange(0,100, 1);
+    RightPanSlider.setValue(50.0f);
 
 	addAndMakeVisible(&PitchComboBox);
 	PitchComboBox.setEditableText(false);
@@ -114,6 +116,8 @@ HarmonizerPluginAudioProcessorEditor::HarmonizerPluginAudioProcessorEditor (Harm
 
 HarmonizerPluginAudioProcessorEditor::~HarmonizerPluginAudioProcessorEditor()
 {
+    deleteAndZero(groupComponent);
+    deleteAndZero(groupComponent2);
 }
 
 //==============================================================================

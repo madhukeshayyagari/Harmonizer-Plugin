@@ -16,9 +16,9 @@ public:
 	Error_t reset();
 	Error_t setParam(float fPitchShiftFactor);
 	Error_t process(float **ppfInputBuffer, float **ppfOutputBuffer, int iNumberOfFrames);
-	Error_t CHarmony::ProcessGain();
-	Error_t CHarmony::ProcessPan();
-	Error_t CHarmony::ProcessPitchFactor();
+    Error_t ProcessGain();
+    Error_t ProcessPan();
+    Error_t ProcessPitchFactor();
 	float   panLPer;
 	float   panRPer;
 	float   outputGainDB;
@@ -35,10 +35,12 @@ private:
 	int     m_iNumChannels;
 	float   m_PitchShiftFactor;
 	float   m_OverLapFactor;
-	float   m_outputGainConverted;
-	float   m_inputGainConverted;
-	float   m_panLConverted;
-	float	m_panRConverted;
+	float   m_outputGainConverted=1.0f;
+	float   m_inputGainConverted=1.0f;
+	float   m_panLConverted=0.5f;
+	float	m_panRConverted=0.5f;
+    
+    float   ** m_tempBuff;
 	virtual ~CHarmony();
 	CHarmony();
 

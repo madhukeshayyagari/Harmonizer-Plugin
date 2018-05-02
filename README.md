@@ -15,6 +15,6 @@ Instructions to run:
 - link all the source files and modules.
 - run the plugin in any VST host.
 
-Preferably use higher sample rates for better performance of the harmony generated. Use the parameters on the UI to generate the output required also to tune the out genertated. 
+Preferably use higher sample rates for better performance of the plugin. Use the parameters on the plugin to have a good mix of output to the input. 
 
 A demo video of the plugin can be found here - https://www.youtube.com/watch?v=j3Sd4T7Hjl0&t=61s

@@ -26,11 +26,17 @@ HarmonizerPlugin1AudioProcessor::HarmonizerPlugin1AudioProcessor()
 #endif
 {
     pCHarmony = 0;
+	CPpm::createInstance(m_pCPpm);
 }
 
 HarmonizerPlugin1AudioProcessor::~HarmonizerPlugin1AudioProcessor()
 {
     pCHarmony->destroy(pCHarmony);
+
+	CPpm::destroyInstance(m_pCPpm);
+	m_pCPpm = 0;
+	delete[] m_fPpmValue;
+	delete[] m_fMaxPpmValue;
 }
 
 //==============================================================================
@@ -105,8 +111,19 @@ void HarmonizerPlugin1AudioProcessor::prepareToPlay (double sampleRate, int samp
     pCHarmony->create(pCHarmony);
     pCHarmony->init((float)this->getSampleRate(), m_pitchShiftFac, totalNumInputChannels);
     pCHarmony->setParam(m_pitchShiftInit);
-    
+	m_iNumChannels = getTotalNumInputChannels();
+	m_pCPpm->initInstance(sampleRate, m_iNumChannels);
+	m_fPpmValue = new float[m_iNumChannels];
+	m_fMaxPpmValue = new float[m_iNumChannels];
     ppfoldbuffer = new float*[totalNumInputChannels];
+
+	
+	for (int i = 0; i < m_iNumChannels; i++)
+	{
+		m_fPpmValue[i] = 0;
+		m_fMaxPpmValue[i] = 0;
+	}
+
     
     for (int i =0; i< totalNumInputChannels; i++) {
         ppfoldbuffer[i] = new float[samplesPerBlock];
@@ -178,8 +195,16 @@ void HarmonizerPlugin1AudioProcessor::processBlock (AudioBuffer<float>& buffer, 
     //    // ..do something to the data...
     //}
     
-    
-    
+	for (int channel = 0; channel < totalNumInputChannels; ++channel)
+	{
+		
+		m_pCPpm->process((float **)buffer.getArrayOfReadPointers(), m_fPpmValue, buffer.getNumSamples());
+
+
+		if (m_fPpmValue[channel] > m_fMaxPpmValue[channel])
+			m_fMaxPpmValue[channel] = m_fPpmValue[channel];
+	}
+
     pCHarmony->processHarmony(ppfoldbuffer, (float**)buffer.getArrayOfReadPointers(), buffer.getArrayOfWritePointers(), buffer.getNumSamples());
     auto** doublechanneldata = (float**)buffer.getArrayOfReadPointers();
     //std::cout<<buffer.getNumSamples()<<"\n";
@@ -234,12 +259,8 @@ void HarmonizerPlugin1AudioProcessor::setParameter(int iParamIdx, float fNewValu
             pCHarmony->inputGainDB = fNewValue;
             pCHarmony->ProcessGain();
             break;
-        case kpanLeft:
-            pCHarmony->panLPer = fNewValue;
-            pCHarmony->ProcessPan();
-            break;
-        case kpanRight:
-            pCHarmony->panRPer = fNewValue;
+        case kpan:
+            pCHarmony->panPer = fNewValue;
             pCHarmony->ProcessPan();
             break;
         case kpitchCombo:
@@ -251,4 +272,20 @@ void HarmonizerPlugin1AudioProcessor::setParameter(int iParamIdx, float fNewValu
             pCHarmony->ProcessPitchFactor();
             break;
     }
+}
+
+float HarmonizerPlugin1AudioProcessor::getMaxPeakMeterValue(int channel)
+{
+	float iMaxPpmValue = 0;
+	if (m_fMaxPpmValue[channel] == 0)
+	{
+		iMaxPpmValue = m_fPpmValue[channel];
+	}
+	else
+	{
+		iMaxPpmValue = m_fMaxPpmValue[channel];
+		m_fMaxPpmValue[channel] = 0;
+
+	}
+	return iMaxPpmValue;
 }

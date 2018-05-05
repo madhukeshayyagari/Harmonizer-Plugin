@@ -19,8 +19,7 @@ public:
     Error_t ProcessGain();
     Error_t ProcessPan();
     Error_t ProcessPitchFactor();
-	float   panLPer;
-	float   panRPer;
+	float   panPer;
     float   outputGainDB = -9.0f;
     float   inputGainDB = 0.0f;
 	int		pitchId = 1;
@@ -37,7 +36,6 @@ private:
 	float   m_OverLapFactor;
     float   m_outputGainConverted;
 	float   m_inputGainConverted;
-	float   m_panLConverted=0.5f;
 	float	m_panRConverted=0.5f;
     
 	float   ** m_tempBuff = 0;

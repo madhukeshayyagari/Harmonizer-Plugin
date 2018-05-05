@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT name="HarmonizerPlugin1" projectType="audioplug" buildStandalone="1"
-              jucerVersion="5.2.1" buildVST3="1">
+              jucerVersion="5.3.1" buildVST3="0" pluginFormats="buildVST,buildStandalone"
+              buildVST="1" buildAU="0" buildAUv3="0" buildRTAS="0" buildAAX="0"
+              enableIAA="0">
   <MAINGROUP id="QOjtu5" name="HarmonizerPlugin1">
     <GROUP id="{4BD5C0C7-2E1A-E648-F0BF-EB33650453F0}" name="Source">
       <FILE id="xHkp7E" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -14,6 +16,10 @@
       <FILE id="VPjg7e" name="ErrorDef.h" compile="0" resource="0" file="Source/ErrorDef.h"/>
       <FILE id="c0vR2N" name="Harmony.cpp" compile="1" resource="0" file="Source/Harmony.cpp"/>
       <FILE id="dc77DB" name="Harmony.h" compile="0" resource="0" file="Source/Harmony.h"/>
+      <FILE id="tW7SoF" name="Ppm.cpp" compile="1" resource="0" file="Source/Ppm.cpp"/>
+      <FILE id="hbsP2P" name="Ppm.h" compile="0" resource="0" file="Source/Ppm.h"/>
+      <FILE id="BbONbX" name="MeterComponent.h" compile="0" resource="0"
+            file="Source/MeterComponent.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

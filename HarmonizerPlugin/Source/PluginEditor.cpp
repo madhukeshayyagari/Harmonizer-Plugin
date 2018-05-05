@@ -15,19 +15,19 @@
 //==============================================================================
 HarmonizerPlugin1AudioProcessorEditor::HarmonizerPlugin1AudioProcessorEditor (HarmonizerPlugin1AudioProcessor& p)
 : AudioProcessorEditor (&p), processor (p),
-authorsLabel("", "Harmonizer by Henry Wang & Madhukesh Ayyagari"),
+authorsLabel("", "Harmonizer by Madhukesh Ayyagari & Henry Wang"),
 groupLabel1("","Harmony Generator"),
 groupLabel2("", "Controls"),
 outputLabel("", "Output Gain"),
 inputLabel("", "Input Gain"),
-leftPanLabel("", "Pan Left"),
-rightPanLabel("", "Pan Right"),
-scaleLabel("", "Scale")
+rightPanLabel("", "Pan"),
+scaleLabel("", "Select Harmony")
 {
+	startTimerHz(100);
     
     addAndMakeVisible(&outputGainSlider);
     outputGainSlider.setSliderStyle(Slider::LinearHorizontal);
-    outputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
+    outputGainSlider.setColour(Slider::thumbColourId, Colour(0xff05124b));
     outputGainSlider.addListener(this);
     outputGainSlider.setRange(-30.0, -9.0, 0.1);
     outputGainSlider.setValue(-9.0);
@@ -35,25 +35,19 @@ scaleLabel("", "Scale")
     
     addAndMakeVisible(&inputGainSlider);
     inputGainSlider.setSliderStyle(Slider::LinearHorizontal);
-    inputGainSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
+    inputGainSlider.setColour(Slider::thumbColourId, Colour(0xff05124b));
     inputGainSlider.addListener(this);
     inputGainSlider.setRange(0.0, 6.0, 0.1);
     inputGainSlider.setValue(0.2);
-    
-    
-    addAndMakeVisible(&LeftPanSlider);
-    LeftPanSlider.setSliderStyle(Slider::LinearBarVertical);
-    LeftPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
-    LeftPanSlider.addListener(this);
-    LeftPanSlider.setRange(0,100, 1);
-    LeftPanSlider.setValue(50.0f);
-    
-    addAndMakeVisible(&RightPanSlider);
-    RightPanSlider.setSliderStyle(Slider::LinearBarVertical);
-    RightPanSlider.setColour(Slider::thumbColourId, Colour(0xffffffff));
-    RightPanSlider.addListener(this);
-    RightPanSlider.setRange(0,100, 1);
-    RightPanSlider.setValue(50.0f);
+       
+    addAndMakeVisible(&PanSlider);
+    PanSlider.setSliderStyle(Slider::LinearBarVertical);
+    PanSlider.setColour(Slider::trackColourId, Colour(0xff05124b));
+    PanSlider.addListener(this);
+    PanSlider.setRange(0,100, 1);
+    PanSlider.setValue(50.0f);
+	PanSlider.setTextBoxStyle(Slider:: TextBoxAbove, false, 160, 30);
+	
     
     addAndMakeVisible(&PitchComboBox);
     PitchComboBox.setEditableText(false);
@@ -62,6 +56,7 @@ scaleLabel("", "Scale")
     PitchComboBox.addItem("Fifth", 2);
     PitchComboBox.addItem("Seventh", 3);
     PitchComboBox.addListener(this);
+	PitchComboBox.setColour(ComboBox::backgroundColourId, Colour(0xff05123b));
     
     addAndMakeVisible(&ScaleComboBox);
     ScaleComboBox.setEditableText(false);
@@ -69,6 +64,9 @@ scaleLabel("", "Scale")
     ScaleComboBox.addItem("Major", 1);
     ScaleComboBox.addItem("Minor", 2);
     ScaleComboBox.addListener(this);
+	ScaleComboBox.setColour(ComboBox::backgroundColourId, Colour(0xff05123b));
+
+	
     
     addAndMakeVisible(groupComponent = new GroupComponent(String::empty,
                                                           String::empty));
@@ -99,11 +97,7 @@ scaleLabel("", "Scale")
     addAndMakeVisible(&inputLabel);
     inputLabel.setFont(Font(16.0f));
     inputLabel.setColour(Label::textColourId, Colours::white);
-    
-    addAndMakeVisible(&leftPanLabel);
-    leftPanLabel.setFont(Font(16.0f));
-    leftPanLabel.setColour(Label::textColourId, Colours::white);
-    
+      
     addAndMakeVisible(&rightPanLabel);
     rightPanLabel.setFont(Font(16.0f));
     rightPanLabel.setColour(Label::textColourId, Colours::white);
@@ -111,6 +105,11 @@ scaleLabel("", "Scale")
     addAndMakeVisible(&scaleLabel);
     scaleLabel.setFont(Font(16.0f));
     scaleLabel.setColour(Label::textColourId, Colours::white);
+
+	addAndMakeVisible(m_pPeakMeterCh1);
+	addAndMakeVisible(m_pPeakMeterCh2);
+
+	
     
     
     setSize (400, 400);
@@ -129,6 +128,12 @@ void HarmonizerPlugin1AudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(Colour(0xff05122b));
+
+	g.setColour(Colours::white);
+	g.setFont(15.0f);
+	g.drawFittedText("dB", 45, 330, 20, 20, Justification::left, 1);
+	g.drawFittedText("dB", 140, 330, 20, 20, Justification::left, 1);
+	
 }
 
 void HarmonizerPlugin1AudioProcessorEditor::resized()
@@ -137,9 +142,8 @@ void HarmonizerPlugin1AudioProcessorEditor::resized()
     // subcomponents in your editor..
     outputGainSlider.setBounds(220, 70, 150, 40);
     inputGainSlider.setBounds(220, 120, 150, 40);
-    LeftPanSlider.setBounds(250, 180, 20, 150);
-    RightPanSlider.setBounds(340, 180, 20, 150);
-    PitchComboBox.setBounds(25, 160, 150, 30);
+    PanSlider.setBounds(275, 180, 20, 150);
+    PitchComboBox.setBounds(25, 130, 150, 30);
     ScaleComboBox.setBounds(25, 80, 150, 30);
     groupComponent->setBounds(15, 30, 180, 350);
     groupComponent2->setBounds(210, 30, 180, 350);
@@ -149,8 +153,9 @@ void HarmonizerPlugin1AudioProcessorEditor::resized()
     scaleLabel.setBounds(25, 50, 200, 25);
     outputLabel.setBounds(240, 55, 200, 25);
     inputLabel.setBounds(240, 105, 200, 25);
-    leftPanLabel.setBounds(225, 330, 200, 25);
-    rightPanLabel.setBounds(310, 330, 200, 25);
+    rightPanLabel.setBounds(270, 330, 200, 25);
+	m_pPeakMeterCh1.setBounds(45, 180, 20, 150);
+	m_pPeakMeterCh2.setBounds(140, 180, 20, 150);
 }
 void HarmonizerPlugin1AudioProcessorEditor::sliderValueChanged(Slider * slider)
 {
@@ -165,14 +170,9 @@ void HarmonizerPlugin1AudioProcessorEditor::sliderValueChanged(Slider * slider)
         processor.setParameter(HarmonizerPlugin1AudioProcessor::kinputGain, (float)inputGainSlider.getValue());
     }
     
-    if (slider == &LeftPanSlider)
+    if (slider == &PanSlider)
     {
-        processor.setParameter(HarmonizerPlugin1AudioProcessor::kpanLeft, (float)LeftPanSlider.getValue());
-    }
-    
-    if (slider == &RightPanSlider)
-    {
-        processor.setParameter(HarmonizerPlugin1AudioProcessor::kpanRight, (float)RightPanSlider.getValue());
+        processor.setParameter(HarmonizerPlugin1AudioProcessor::kpan, (float)PanSlider.getValue());
     }
 }
 
@@ -184,5 +184,11 @@ void HarmonizerPlugin1AudioProcessorEditor::comboBoxChanged(ComboBox *comboBox)
     if (comboBox == &ScaleComboBox) {
         processor.setParameter(HarmonizerPlugin1AudioProcessor::kscaleCombo, (float)ScaleComboBox.getSelectedId());
     }
+}
+
+void HarmonizerPlugin1AudioProcessorEditor::timerCallback()
+{
+	m_pPeakMeterCh1.setPMValue(processor.getMaxPeakMeterValue(0));
+	m_pPeakMeterCh2.setPMValue(processor.getMaxPeakMeterValue(1));
 }
 

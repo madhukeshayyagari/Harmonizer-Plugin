@@ -106,8 +106,7 @@ Error_t CHarmony::ProcessGain() {
 
 Error_t CHarmony::ProcessPan()
 {
-	m_panLConverted = panLPer / 100.0f;
-	m_panRConverted = panRPer / 100.0f;
+	m_panRConverted = panPer / 100.0f;
 	return kNoError;
 	}
 
@@ -267,7 +266,7 @@ Error_t CHarmony::processHarmony(float **ppfPreviousBuffer,float **ppfInputBuffe
 	for (int i = 0; i < m_iNumChannels; i++) {
 		for (int j = 0; j < iNumberOfFrames; j++) {
             if (i == 0) {
-                ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(cos(pi*m_panLConverted/2));
+                ppfOutputBuffer[i][j] =  ((m_tempBuff[i][j]*m_inputGainConverted)+(ppfOutputBuffer[i][j] * m_outputGainConverted))*(cos(pi*m_panRConverted/2));
                 
 //                cout<<m_panLConverted<<"\n";
              //cout<<m_outputGainConverted<<"\n";

@@ -13,6 +13,8 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "Harmony.h"
 #include "ErrorDef.h"
+#include "Ppm.h"
+
 
 
 //==============================================================================
@@ -58,12 +60,12 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     void setParameter(int paramIdx, float fNewValue) override;
+	float getMaxPeakMeterValue(int channel);
     
     enum Parameters {
         koutputGain,
         kinputGain,
-        kpanLeft,
-        kpanRight,
+        kpan,
         kpitchCombo,
         kscaleCombo
     };
@@ -79,6 +81,8 @@ public:
         Minor
     };
 
+
+
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HarmonizerPlugin1AudioProcessor)
@@ -87,4 +91,9 @@ private:
     float** ppfoldbuffer = 0;
     float m_pitchShiftFac = 1.0f;
     float const m_pitchShiftInit = 1.0f;
+
+	CPpm *m_pCPpm = 0;
+	float* m_fPpmValue = 0;
+	float* m_fMaxPpmValue = 0;
+	int m_iNumChannels = 0;
 };

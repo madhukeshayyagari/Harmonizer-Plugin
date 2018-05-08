@@ -13,8 +13,9 @@ Instructions to run:
 - Download
 - run the producer file.
 - link all the source files and modules.
-- run the plugin in any VST host.
+- Compile and execute the files to generate the vst.
+- run the vst plugin in any VST host.
 
 Preferably use higher sample rates for better performance of the plugin. Use the parameters on the plugin to have a good mix of output to the input. 
 
-A demo video of the plugin can be found here - https://www.youtube.com/watch?v=j3Sd4T7Hjl0&t=61s
+A demo video of the plugin can be found here - https://www.youtube.com/watch?v=bzFlN5MogUY
